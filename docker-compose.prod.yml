@@ -1,0 +1,39 @@
+version: '3.8' # 배포용 docker-compose 파일입니다.
+
+services:
+  backend:
+    image: ohksj77/file-extensions
+    container_name: backend
+    ports:
+      - "80:8080"
+    restart: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod # 보안상 공개하면 안되지만 편의상 그대로 커밋합니다.
+      - DATABASE_HOST=database
+      - DATABASE_PORT=3306
+      - DATABASE_SCHEMA=file_extensions
+      - DATABASE_USERNAME=admin
+      - DATABASE_PASSWORD=1234
+    depends_on:
+      - database
+    networks:
+      - app-tier
+
+  database:
+    image: mysql
+    container_name: database
+    environment:
+      - MYSQL_DATABASE=file_extensions # 보안상 공개하면 안되지만 편의상 그대로 커밋합니다.
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=1234
+    volumes:
+      - "./database:/var/lib/mysql"
+    ports:
+      - "3306:3306"
+    networks:
+      - app-tier
+
+networks:
+  app-tier:
+    driver: bridge
