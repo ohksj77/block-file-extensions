@@ -5,6 +5,11 @@ spring:
     username: sa
     password:
 
+  mvc:
+    view:
+      prefix: /templates/
+      suffix: .html
+
   jpa:
     show-sql: true
     hibernate:
