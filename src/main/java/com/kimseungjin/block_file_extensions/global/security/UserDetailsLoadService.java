@@ -25,7 +25,7 @@ public class UserDetailsLoadService implements UserDetailsService {
 
         return User.withUsername(member.getLoginId())
                 .password(member.getPassword())
-                .roles(member.getRole().name())
+                .roles(member.getRoleValues())
                 .build();
     }
 }

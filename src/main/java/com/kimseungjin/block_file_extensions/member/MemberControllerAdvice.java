@@ -13,4 +13,11 @@ public class MemberControllerAdvice {
         redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         return "redirect:/error";
     }
+
+    @ExceptionHandler(InvalidLoginCredentialException.class)
+    public String handleInvalidLoginCredentialException(
+            final InvalidLoginCredentialException e, final RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        return "redirect:/error";
+    }
 }
