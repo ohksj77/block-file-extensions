@@ -9,7 +9,6 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: none
-    database: mysql
     open-in-view: false
 
   flyway:
