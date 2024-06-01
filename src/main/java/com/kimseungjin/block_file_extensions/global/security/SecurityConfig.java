@@ -1,6 +1,5 @@
 package com.kimseungjin.block_file_extensions.global.security;
 
-
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.context.annotation.Bean;
@@ -17,13 +16,19 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private static final String[] AUTH_WHITELIST = {"/register"};
+    private static final String[] AUTH_WHITELIST = {"/api/members/register", "/register", "/error"};
     private final UserDetailsLoadService userDetailsLoadService;
+    private final AuthFailureHandler authFailureHandler;
 
     @Bean
     public SecurityFilterChain configure(final HttpSecurity http) throws Exception {
         return http.httpBasic(AbstractHttpConfigurer::disable)
-                .formLogin(formLogin -> formLogin.loginPage("/login").permitAll())
+                .formLogin(
+                        formLogin ->
+                                formLogin
+                                        .loginPage("/login")
+                                        .permitAll()
+                                        .failureHandler(authFailureHandler))
                 .logout(
                         logout ->
                                 logout.logoutUrl("/logout").logoutSuccessUrl("/login").permitAll())
