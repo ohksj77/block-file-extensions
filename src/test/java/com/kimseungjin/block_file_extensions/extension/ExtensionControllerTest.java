@@ -1,8 +1,13 @@
 package com.kimseungjin.block_file_extensions.extension;
 
+import static com.kimseungjin.block_file_extensions.support.docs.ApiDocsUtils.getDocumentRequest;
+import static com.kimseungjin.block_file_extensions.support.docs.ApiDocsUtils.getDocumentResponse;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.kimseungjin.block_file_extensions.extension.dto.ExtensionRequest;
@@ -30,10 +35,11 @@ class ExtensionControllerTest extends ControllerTest {
     @DisplayName("파일 확장자 추가/삭제가 정상 작동하는가")
     @Test
     void updateExtension() throws Exception {
-
+        // given
         doNothing().when(extensionService).updateExtension(any(), any());
         final ExtensionRequest request = ExtensionFixture.toAddRequest();
 
+        // when
         final ResultActions perform =
                 mockMvc.perform(
                         post("/api/extensions")
@@ -41,6 +47,11 @@ class ExtensionControllerTest extends ControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(toRequestBody(request)));
 
+        // then
         perform.andExpect(status().is3xxRedirection());
+
+        // docs
+        perform.andDo(print())
+                .andDo(document("post extension", getDocumentRequest(), getDocumentResponse()));
     }
 }

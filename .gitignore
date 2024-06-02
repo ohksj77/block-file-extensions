@@ -39,3 +39,4 @@ out/
 .DS_Store
 /database
 src/main/resources/files
+/src/docs/index.html

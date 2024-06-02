@@ -43,7 +43,8 @@ public class MemberTest {
         final Member member = new Member(loginId, password);
 
         // then
-        assertThat(member.getLoginId()).isEqualTo(loginId);
-        assertThat(member.getPassword()).isEqualTo(password);
+        final LoginCredential loginCredential = member.getLoginCredential();
+        assertThat(loginCredential.getPassword()).isEqualTo(password);
+        assertThat(loginCredential.getLoginId()).isEqualTo(loginId);
     }
 }

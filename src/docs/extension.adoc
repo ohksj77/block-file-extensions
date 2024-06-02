@@ -1,0 +1,11 @@
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+
+== Extension
+
+=== 파일 확장자 업데이트
+
+operation::post extension[snippets='http-request,http-response']

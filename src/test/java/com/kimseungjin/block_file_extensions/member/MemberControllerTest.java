@@ -1,8 +1,13 @@
 package com.kimseungjin.block_file_extensions.member;
 
+import static com.kimseungjin.block_file_extensions.support.docs.ApiDocsUtils.getDocumentRequest;
+import static com.kimseungjin.block_file_extensions.support.docs.ApiDocsUtils.getDocumentResponse;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.kimseungjin.block_file_extensions.fixture.MemberFixture;
@@ -30,9 +35,11 @@ class MemberControllerTest extends ControllerTest {
     @DisplayName("회원 가입이 정상 수행되는가")
     @Test
     void register() throws Exception {
+        // given
         doNothing().when(memberService).register(any());
         final RegisterRequest request = MemberFixture.REGISTER_REQUEST.toRegisterRequest();
 
+        // when
         final ResultActions perform =
                 mockMvc.perform(
                         post("/api/members/register")
@@ -40,6 +47,11 @@ class MemberControllerTest extends ControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(toRequestBody(request)));
 
+        // then
         perform.andExpect(status().is3xxRedirection());
+
+        // docs
+        perform.andDo(print())
+                .andDo(document("post register", getDocumentRequest(), getDocumentResponse()));
     }
 }
