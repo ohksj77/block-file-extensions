@@ -32,6 +32,7 @@ public class Extension implements Auditable {
 
     private static final char FILE_EXTENSION_DELIMITER = '.';
     private static final int MAX_EXTENSION_LENGTH = 20;
+    private static final int MAX_CUSTOM_EXTENSION_SIZE = 200;
 
     @Id @GeneratedValue private Long id;
 
@@ -40,10 +41,10 @@ public class Extension implements Auditable {
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(fetch = FetchType.EAGER)
-    private Set<FixedExtension> fixedExtensions = new HashSet<>();
+    private Set<FixedExtension> fixedExtensions = new HashSet<>(FixedExtension.values().length);
 
     @ElementCollection(fetch = FetchType.EAGER)
-    private Set<String> customExtensions = new LinkedHashSet<>();
+    private Set<String> customExtensions = new LinkedHashSet<>(MAX_CUSTOM_EXTENSION_SIZE);
 
     @Getter @Setter @Embedded private BaseTime baseTime;
 
