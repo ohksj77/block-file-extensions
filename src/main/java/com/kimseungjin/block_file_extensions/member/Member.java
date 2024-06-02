@@ -6,6 +6,7 @@ import com.kimseungjin.block_file_extensions.global.audit.BaseTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
@@ -46,7 +47,7 @@ public class Member implements Auditable {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<Role> role = new ArrayList<>(List.of(Role.ROLE_USER));
 
-    @Getter @Setter private BaseTime baseTime;
+    @Setter @Embedded private BaseTime baseTime;
 
     public Member(final String loginId, final String password) {
         validate(loginId, password);

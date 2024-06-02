@@ -54,6 +54,6 @@ class ExtensionServiceTest extends LoginTest {
         // when
         // then
         assertThatThrownBy(() -> extensionService.updateExtension(request, loginUserId()))
-                .isInstanceOf(InvalidExtensionException.class);
+                .isInstanceOf(RegisteredExtensionException.class);
     }
 }
