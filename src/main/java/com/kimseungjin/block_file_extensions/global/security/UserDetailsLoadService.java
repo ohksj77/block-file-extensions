@@ -1,6 +1,5 @@
 package com.kimseungjin.block_file_extensions.global.security;
 
-import com.kimseungjin.block_file_extensions.global.exception.EntityNotFoundException;
 import com.kimseungjin.block_file_extensions.member.Member;
 import com.kimseungjin.block_file_extensions.member.MemberRepository;
 
@@ -21,9 +20,9 @@ public class UserDetailsLoadService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         final Member member =
-                memberRepository.findByLoginId(username).orElseThrow(EntityNotFoundException::new);
+                memberRepository.findByLoginId(username).orElseThrow(LoginException::new);
 
-        return User.withUsername(member.getLoginId())
+        return User.withUsername(String.valueOf(member.getId()))
                 .password(member.getPassword())
                 .roles(member.getRoleValues())
                 .build();

@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>Extension Manager</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
@@ -96,39 +98,53 @@
 </head>
 <body>
 <div class="container">
+
+    <!-- 고정 확장자 섹션 -->
     <div class="section">
         <div class="label-column">
             <h2>고정 확장자</h2>
         </div>
         <div class="content-column fixed-extensions">
             <label th:each="extension : ${fixedExtensions}">
-                <input th:text="${extension}" th:value="${extension}" type="checkbox">
+                <input class="fixed-extension-checkbox"
+                       th:checked="${#sets.contains(chosenFixedExtensions, extension)}"
+                       th:value="${extension}"
+                       type="checkbox">
+                <span th:text="${extension}"></span>
             </label>
         </div>
     </div>
 
+    <!-- 커스텀 확장자 추가 섹션 -->
     <div class="section custom-extensions">
         <div class="label-column">
             <h2>커스텀 확장자</h2>
         </div>
         <div class="content-column input-group">
-            <input id="custom-extension" placeholder="확장자 입력" type="text">
+            <label for="custom-extension"></label><input id="custom-extension" placeholder="확장자 입력" type="text">
             <button id="add-extension">+추가</button>
         </div>
     </div>
 
+    <!-- 추가된 커스텀 확장자 목록 섹션 -->
     <div class="section">
         <div class="label-column">
             &nbsp;
         </div>
         <div class="content-column">
             <div class="extension-list">
-                <div id="extensions-count">0/200</div>
-                <div id="custom-extensions-container"></div>
+                <div id="extensions-count" th:text="${chosenCustomExtensions.size()} + '/200'">0/200</div>
+                <div id="custom-extensions-container">
+                    <span class="extension-item" th:each="extension : ${chosenCustomExtensions}">
+                        <span th:text="${extension}"></span>
+                        <span class="remove-extension" th:data-extension="${extension}">x</span>
+                    </span>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- 파일 전송 섹션 -->
     <div class="section">
         <div class="label-column">
             &nbsp;
@@ -140,6 +156,7 @@
         </div>
     </div>
 
+    <!-- 로그아웃 섹션 -->
     <div class="section">
         <div class="label-column">
             &nbsp;
@@ -155,21 +172,16 @@
 
 <script>
     const maxFileNum = 200;
-    const fixedExtensions = $('.fixed-extensions label').map(function () {
-        return $(this).text().trim();
-    }).get();
-    let customExtensions = [];
+    const fixedExtensions = new Set($('.fixed-extensions label input').map(function () {
+        return $(this).val();
+    }).get());
+    const customExtensions = new Set(/*[[${chosenCustomExtensions}]]*/ []);
 
     $(document).ready(function () {
-        function updateCount() {
-            $('#extensions-count').text(`${customExtensions.length}/${maxFileNum}`);
-        }
 
         function addExtension(extension) {
-            if (customExtensions.length < maxFileNum) {
-                customExtensions.push(extension);
-                $('#custom-extensions-container').append(`<span class="extension-item">${extension} <span class="remove-extension" data-extension="${extension}">x</span></span>`);
-                updateCount();
+            if (customExtensions.size < maxFileNum) {
+                customExtensions.add(extension);
             }
         }
 
@@ -178,24 +190,66 @@
             return extensionRegex.test(extension);
         }
 
+        $('.fixed-extension-checkbox').change(function () {
+            const checkbox = $(this);
+            const name = checkbox.val();
+            const isChecked = checkbox.is(':checked');
+            const csrfToken = $("meta[name='_csrf']").attr("content");
+            const csrfHeader = $("meta[name='_csrf_header']").attr("content");
+
+            $.ajax({
+                url: '/api/extensions',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({"name": name, "isAdded": isChecked}),
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(csrfHeader, csrfToken);
+                },
+                success: function () {
+                    location.reload();
+                },
+                error: function () {
+                    alert('고정 확장자 업데이트 실패');
+                    checkbox.prop('checked', !isChecked);
+                }
+            });
+        });
+
         $('#add-extension').click(function () {
             const customExtension = $('#custom-extension');
-            const extension = customExtension.val().trim();
-            if (!extension || !isValidExtension(extension)) {
+            const name = customExtension.val().trim();
+            const csrfToken = $("meta[name='_csrf']").attr("content");
+            const csrfHeader = $("meta[name='_csrf_header']").attr("content");
+
+            if (!name || !isValidExtension(name)) {
                 alert('올바른 확장자를 입력하세요.');
                 return;
             }
-            if (customExtensions.includes(extension)) {
+            if (customExtensions.has(name)) {
                 alert('이미 추가된 확장자입니다.');
                 return;
             }
-            if (fixedExtensions.includes(extension)) {
+            if (fixedExtensions.has(name)) {
                 alert('고정 확장자는 추가할 수 없습니다.');
                 return;
             }
 
-            addExtension(extension);
-            customExtension.val('');
+            $.ajax({
+                url: '/api/extensions',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({"name": name, "isAdded": true}),
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(csrfHeader, csrfToken);
+                },
+                success: function () {
+                    location.reload();
+                    addExtension(name);
+                },
+                error: function () {
+                    alert('커스텀 확장자 추가 실패');
+                }
+            });
         });
 
         $('#custom-extension').keypress(function (e) {
@@ -207,13 +261,29 @@
 
         $(document).on('click', '.remove-extension', function (e) {
             e.preventDefault();
-            const extension = $(this).data('extension');
-            customExtensions = customExtensions.filter(ext => ext !== extension);
+            const name = $(this).data('extension');
+            const csrfToken = $("meta[name='_csrf']").attr("content");
+            const csrfHeader = $("meta[name='_csrf_header']").attr("content");
+
+            $.ajax({
+                url: '/api/extensions',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({"name": name, "isAdded": false}),
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(csrfHeader, csrfToken);
+                },
+                success: function () {
+                    location.reload();
+                },
+                error: function () {
+                    alert('커스텀 확장자 제거 실패');
+                }
+            });
+            customExtensions.delete(name);
             $(this).parent().remove();
-            updateCount();
         });
 
-        updateCount();
 
         $('#delete-file').click(function () {
             const fileInput = $('#file-input');
@@ -226,8 +296,10 @@
                 const formData = new FormData();
                 const file = fileInput.files[0];
                 const extension = file.name.split('.').pop();
+                const csrfToken = $("meta[name='_csrf']").attr("content");
+                const csrfHeader = $("meta[name='_csrf_header']").attr("content");
 
-                if (fixedExtensions.includes(extension) || customExtensions.includes(extension)) {
+                if (fixedExtensions.has(extension) || customExtensions.has(extension)) {
                     alert('허용되지 않는 확장자입니다.');
                     return;
                 }
@@ -235,11 +307,14 @@
                 formData.append('file', file);
 
                 $.ajax({
-                    url: '/files/upload',
+                    url: '/files',
                     type: 'POST',
                     data: formData,
                     processData: false,
                     contentType: false,
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(csrfHeader, csrfToken);
+                    },
                     success: function () {
                         alert('파일 전송 성공');
                     },

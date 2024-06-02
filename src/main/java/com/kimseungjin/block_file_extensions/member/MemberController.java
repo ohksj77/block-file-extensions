@@ -19,6 +19,6 @@ public class MemberController {
     @PostMapping("register")
     public String register(@RequestBody @Valid final RegisterRequest registerRequest) {
         memberService.register(registerRequest);
-        return "redirect:/";
+        return "redirect:/login";
     }
 }

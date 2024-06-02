@@ -20,7 +20,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import org.hibernate.annotations.SoftDelete;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +30,9 @@ import java.util.List;
 @EntityListeners(AuditListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member implements Auditable {
+
+    private static final int MIN_CREDENTIAL_LENGTH = 3;
+    private static final int MAX_CREDENTIAL_LENGTH = 10;
 
     @Id @GeneratedValue private Long id;
 
@@ -53,24 +55,17 @@ public class Member implements Auditable {
     }
 
     private void validate(final String loginId, final String password) {
-        if (loginId == null
-                || isInvalidLength(loginId)
-                || password == null
-                || isInvalidLength(password)) {
+        if (loginId == null || isInvalidLength(loginId) || password == null || password.isBlank()) {
             throw new InvalidLoginCredentialException();
         }
     }
 
     private boolean isInvalidLength(final String credential) {
         final int length = credential.length();
-        return 3 > length || length > 10;
-    }
-
-    public List<SimpleGrantedAuthority> getRole() {
-        return this.role.stream().map(Role::name).map(SimpleGrantedAuthority::new).toList();
+        return MIN_CREDENTIAL_LENGTH > length || length > MAX_CREDENTIAL_LENGTH;
     }
 
     public String[] getRoleValues() {
-        return this.role.stream().map(Role::name).toArray(String[]::new);
+        return this.role.stream().map(Role::toString).toArray(String[]::new);
     }
 }
