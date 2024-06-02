@@ -1,8 +1,8 @@
 package com.kimseungjin.block_file_extensions.view;
 
-import com.kimseungjin.block_file_extensions.extension.ExtensionResponse;
 import com.kimseungjin.block_file_extensions.extension.ExtensionService;
 import com.kimseungjin.block_file_extensions.extension.FixedExtension;
+import com.kimseungjin.block_file_extensions.extension.dto.ExtensionResponse;
 import com.kimseungjin.block_file_extensions.file.FileService;
 
 import lombok.RequiredArgsConstructor;

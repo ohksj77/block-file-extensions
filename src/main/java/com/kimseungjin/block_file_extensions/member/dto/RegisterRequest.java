@@ -1,4 +1,4 @@
-package com.kimseungjin.block_file_extensions.member;
+package com.kimseungjin.block_file_extensions.member.dto;
 
 import org.hibernate.validator.constraints.Length;
 

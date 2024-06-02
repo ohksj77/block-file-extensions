@@ -1,5 +1,7 @@
 package com.kimseungjin.block_file_extensions.member;
 
+import com.kimseungjin.block_file_extensions.member.dto.RegisterRequest;
+
 import jakarta.validation.Valid;
 
 import lombok.RequiredArgsConstructor;

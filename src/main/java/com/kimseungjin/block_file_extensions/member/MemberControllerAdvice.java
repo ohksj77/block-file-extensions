@@ -13,15 +13,18 @@ public class MemberControllerAdvice {
     @ExceptionHandler(DuplicateLoginIdException.class)
     public String handleDuplicateLoginIdException(
             final DuplicateLoginIdException e, final RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-        return "redirect:/error";
+        return handle(redirectAttributes, e.getMessage());
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(InvalidLoginCredentialException.class)
     public String handleInvalidLoginCredentialException(
             final InvalidLoginCredentialException e, final RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        return handle(redirectAttributes, e.getMessage());
+    }
+
+    private String handle(final RedirectAttributes redirectAttributes, final String errorMessage) {
+        redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
         return "redirect:/error";
     }
 }

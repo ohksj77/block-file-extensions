@@ -216,7 +216,7 @@
         }
 
         function isValidExtension(extension) {
-            const extensionRegex = /^[a-zA-Z0-9_-]{2,5}$/;
+            const extensionRegex = /^[a-zA-Z0-9_-]{1,20}$/;
             return extensionRegex.test(extension);
         }
 

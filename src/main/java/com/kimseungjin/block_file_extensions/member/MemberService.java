@@ -1,5 +1,7 @@
 package com.kimseungjin.block_file_extensions.member;
 
+import com.kimseungjin.block_file_extensions.member.dto.RegisterRequest;
+
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,7 +25,7 @@ public class MemberService {
     }
 
     private void validateLoginId(final String loginId) {
-        if (memberRepository.existsByLoginId(loginId)) {
+        if (memberRepository.existsByLoginCredentialLoginId(loginId)) {
             throw new DuplicateLoginIdException();
         }
     }

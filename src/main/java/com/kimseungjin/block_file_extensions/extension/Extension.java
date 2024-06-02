@@ -23,7 +23,6 @@ import org.hibernate.annotations.SoftDelete;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Entity
@@ -31,8 +30,8 @@ import java.util.stream.Collectors;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Extension implements Auditable {
 
-    private static final Pattern EXTENSION_PATTERN = Pattern.compile("^[a-zA-Z0-9_-]{2,5}$");
     private static final char FILE_EXTENSION_DELIMITER = '.';
+    private static final int MAX_EXTENSION_LENGTH = 20;
 
     @Id @GeneratedValue private Long id;
 
@@ -53,11 +52,18 @@ public class Extension implements Auditable {
     }
 
     public void updateExtension(final String extension, final Boolean isAdded) {
+        validateLength(extension);
         if (FixedExtension.contains(extension)) {
             updateFixedExtension(extension, isAdded);
             return;
         }
         updateCustomExtension(extension, isAdded);
+    }
+
+    private void validateLength(final String extension) {
+        if (extension.length() > MAX_EXTENSION_LENGTH) {
+            throw new InvalidExtensionLengthException();
+        }
     }
 
     private void updateCustomExtension(final String extension, final Boolean isAdded) {
@@ -80,13 +86,9 @@ public class Extension implements Auditable {
     }
 
     private void validateCustomExtension(final String extension) {
-        if (customExtensions.contains(extension) || isInvalidExtensionPattern(extension)) {
+        if (customExtensions.contains(extension)) {
             throw new RegisteredExtensionException();
         }
-    }
-
-    private boolean isInvalidExtensionPattern(final String extension) {
-        return !EXTENSION_PATTERN.matcher(extension).matches();
     }
 
     public Set<String> getFixedExtensionValues() {
@@ -101,7 +103,7 @@ public class Extension implements Auditable {
 
     private boolean isInvalidExtension(final String extension) {
         return FixedExtension.findExtension(extension).map(fixedExtensions::contains).orElse(false)
-                && customExtensions.contains(extension);
+                || customExtensions.contains(extension);
     }
 
     public void validateExtension(final String originalFilename) {

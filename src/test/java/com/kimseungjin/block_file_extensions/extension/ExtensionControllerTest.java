@@ -5,6 +5,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.kimseungjin.block_file_extensions.extension.dto.ExtensionRequest;
 import com.kimseungjin.block_file_extensions.fixture.ExtensionFixture;
 import com.kimseungjin.block_file_extensions.support.controller.ControllerTest;
 import com.kimseungjin.block_file_extensions.support.web.UserIdArgumentResolverImpl;

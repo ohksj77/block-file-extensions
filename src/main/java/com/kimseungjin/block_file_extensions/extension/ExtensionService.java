@@ -1,5 +1,8 @@
 package com.kimseungjin.block_file_extensions.extension;
 
+import com.kimseungjin.block_file_extensions.extension.dto.ExtensionRequest;
+import com.kimseungjin.block_file_extensions.extension.dto.ExtensionResponse;
+
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;

@@ -13,15 +13,18 @@ public class ExtensionControllerAdvice {
     @ExceptionHandler(RegisteredExtensionException.class)
     public String handleRegisteredExtensionException(
             final RegisteredExtensionException e, final RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-        return "redirect:/error";
+        return handle(redirectAttributes, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(InvalidExtensionException.class)
     public String handleInvalidExtensionException(
             final InvalidExtensionException e, final RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        return handle(redirectAttributes, e.getMessage());
+    }
+
+    private String handle(final RedirectAttributes redirectAttributes, final String errorMessage) {
+        redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
         return "redirect:/error";
     }
 }

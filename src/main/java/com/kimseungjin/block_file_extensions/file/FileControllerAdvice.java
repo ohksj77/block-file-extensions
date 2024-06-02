@@ -13,15 +13,18 @@ public class FileControllerAdvice {
     @ExceptionHandler(FileOwnerMismatchException.class)
     public String handleFileOwnerMismatchException(
             final FileOwnerMismatchException e, final RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-        return "redirect:/error";
+        return handle(redirectAttributes, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(FileStorageException.class)
     public String handleFileStorageException(
             final FileStorageException e, final RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        return handle(redirectAttributes, e.getMessage());
+    }
+
+    private String handle(final RedirectAttributes redirectAttributes, final String errorMessage) {
+        redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
         return "redirect:/error";
     }
 }

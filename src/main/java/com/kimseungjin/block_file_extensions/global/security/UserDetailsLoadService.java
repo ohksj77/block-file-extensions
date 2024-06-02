@@ -20,10 +20,12 @@ public class UserDetailsLoadService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         final Member member =
-                memberRepository.findByLoginId(username).orElseThrow(LoginException::new);
+                memberRepository
+                        .findByLoginCredentialLoginId(username)
+                        .orElseThrow(LoginException::new);
 
         return User.withUsername(String.valueOf(member.getId()))
-                .password(member.getPassword())
+                .password(member.getLoginCredential().getPassword())
                 .roles(member.getRoleValues())
                 .build();
     }

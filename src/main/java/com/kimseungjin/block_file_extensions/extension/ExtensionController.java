@@ -1,5 +1,7 @@
 package com.kimseungjin.block_file_extensions.extension;
 
+import com.kimseungjin.block_file_extensions.extension.dto.ExtensionRequest;
+
 import jakarta.validation.Valid;
 
 import lombok.RequiredArgsConstructor;
