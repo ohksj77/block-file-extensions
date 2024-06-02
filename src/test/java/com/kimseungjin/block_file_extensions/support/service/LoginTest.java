@@ -20,4 +20,8 @@ public abstract class LoginTest {
         final Member member = MemberFixture.LOGIN_MEMBER.toEntity();
         loginUser = memberRepository.save(member);
     }
+
+    protected Long loginUserId() {
+        return loginUser.getId();
+    }
 }

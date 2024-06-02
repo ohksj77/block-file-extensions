@@ -7,9 +7,9 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum MemberFixture {
-    LOGIN_MEMBER("login-member", "$2a$10$H72/TQEEhkVs1RLg03wl9OT31HSVGcYMs/ftn2u6oRS4iwJCRfZHu"),
-    MEMBER1("test-member1", "$2a$10$H72/TQEEhkVs1RLg03wl9OT31HSVGcYMs/ftn2u6oRS4iwJCRfZHu"),
-    MEMBER2("test-member2", "$2a$10$T9EPJaXl7UCxp2bFm5w.6edudus2e6LVu/DD1R6qeS.c7q7wHOjHu");
+    LOGIN_MEMBER("logined", "$2a$10$H72/TQEEhkVs1RLg03wl9OT31HSVGcYMs/ftn2u6oRS4iwJCRfZHu"),
+    MEMBER1("member1", "$2a$10$H72/TQEEhkVs1RLg03wl9OT31HSVGcYMs/ftn2u6oRS4iwJCRfZHu"),
+    MEMBER2("member2", "$2a$10$T9EPJaXl7UCxp2bFm5w.6edudus2e6LVu/DD1R6qeS.c7q7wHOjHu");
 
     private final String loginId;
     private final String password;

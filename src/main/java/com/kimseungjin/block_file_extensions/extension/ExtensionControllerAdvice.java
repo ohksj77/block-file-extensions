@@ -7,9 +7,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @ControllerAdvice
 public class ExtensionControllerAdvice {
 
-    @ExceptionHandler(DuplicateExtensionException.class)
-    public String handleDuplicateExtensionException(
-            final DuplicateExtensionException e, final RedirectAttributes redirectAttributes) {
+    @ExceptionHandler(InvalidExtensionException.class)
+    public String handleInvalidExtensionException(
+            final InvalidExtensionException e, final RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         return "redirect:/error";
     }

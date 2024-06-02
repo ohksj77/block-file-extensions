@@ -31,7 +31,7 @@ public class ExtensionController {
     }
 
     @PostMapping("api/extensions")
-    public String addExtension(
+    public String updateExtension(
             @RequestBody @Valid final ExtensionRequest extensionRequest,
             @AuthenticationPrincipal final Long memberId) {
         extensionService.updateExtension(extensionRequest, memberId);

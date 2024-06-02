@@ -5,6 +5,7 @@ import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
@@ -29,10 +30,11 @@ public class Extension {
     private Long memberId;
 
     @Enumerated(EnumType.STRING)
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private Set<FixedExtension> fixedExtensions = new HashSet<>();
 
-    @ElementCollection private Set<String> customExtensions = new LinkedHashSet<>();
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<String> customExtensions = new LinkedHashSet<>();
 
     public Extension(final Long memberId) {
         this.memberId = memberId;
@@ -67,7 +69,7 @@ public class Extension {
 
     private void validateCustomExtension(final String extension) {
         if (customExtensions.contains(extension) || isInvalidExtensionPattern(extension)) {
-            throw new DuplicateExtensionException();
+            throw new InvalidExtensionException();
         }
     }
 
