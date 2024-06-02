@@ -1,7 +1,11 @@
 package com.kimseungjin.block_file_extensions.extension;
 
+import com.kimseungjin.block_file_extensions.global.audit.Auditable;
+import com.kimseungjin.block_file_extensions.global.audit.BaseTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -10,7 +14,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import org.hibernate.annotations.SoftDelete;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -19,10 +27,12 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Entity
+@SoftDelete
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Extension {
+public class Extension implements Auditable {
 
     private static final Pattern EXTENSION_PATTERN = Pattern.compile("^[a-zA-Z0-9_-]{2,5}$");
+    private static final char FILE_EXTENSION_DELIMITER = '.';
 
     @Id @GeneratedValue private Long id;
 
@@ -35,6 +45,8 @@ public class Extension {
 
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<String> customExtensions = new LinkedHashSet<>();
+
+    @Getter @Setter @Embedded private BaseTime baseTime;
 
     public Extension(final Long memberId) {
         this.memberId = memberId;
@@ -69,7 +81,7 @@ public class Extension {
 
     private void validateCustomExtension(final String extension) {
         if (customExtensions.contains(extension) || isInvalidExtensionPattern(extension)) {
-            throw new InvalidExtensionException();
+            throw new RegisteredExtensionException();
         }
     }
 
@@ -85,5 +97,22 @@ public class Extension {
 
     public Set<String> getCustomExtensionValues() {
         return new LinkedHashSet<>(customExtensions);
+    }
+
+    private boolean isInvalidExtension(final String extension) {
+        return FixedExtension.findExtension(extension).map(fixedExtensions::contains).orElse(false)
+                && customExtensions.contains(extension);
+    }
+
+    public void validateExtension(final String originalFilename) {
+        final String extension = extractExtension(originalFilename);
+        if (isInvalidExtension(extension)) {
+            throw new RegisteredExtensionException();
+        }
+    }
+
+    private String extractExtension(final String originalFilename) {
+        final int lastIndexOfDot = originalFilename.lastIndexOf(FILE_EXTENSION_DELIMITER);
+        return originalFilename.substring(lastIndexOfDot + 1);
     }
 }

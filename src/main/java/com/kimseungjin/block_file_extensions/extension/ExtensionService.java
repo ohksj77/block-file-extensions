@@ -24,7 +24,7 @@ public class ExtensionService {
                 extension.getFixedExtensionValues(), extension.getCustomExtensionValues());
     }
 
-    private Extension findByMemberId(final Long memberId) {
+    public Extension findByMemberId(final Long memberId) {
         return extensionRepository
                 .findByMemberId(memberId)
                 .orElseGet(() -> extensionRepository.save(new Extension(memberId)));

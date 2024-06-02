@@ -2,6 +2,7 @@ package com.kimseungjin.block_file_extensions.extension;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public enum FixedExtension {
     BAT("bat"),
@@ -31,6 +32,12 @@ public enum FixedExtension {
                 .filter(element -> element.extension.equals(extension))
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);
+    }
+
+    public static Optional<FixedExtension> findExtension(final String extension) {
+        return Arrays.stream(values())
+                .filter(element -> element.extension.equals(extension))
+                .findFirst();
     }
 
     @Override

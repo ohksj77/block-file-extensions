@@ -94,6 +94,19 @@
             border-radius: 10px;
             border: 1px solid #ccc;
         }
+
+        .file-list {
+            margin-top: 20px;
+            width: 400px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 10px;
+            background: #f9f9f9;
+        }
+
+        .file-item {
+            margin: 5px 0;
+        }
     </style>
 </head>
 <body>
@@ -156,6 +169,21 @@
         </div>
     </div>
 
+    <!-- 내 파일 목록 섹션 -->
+    <div class="section">
+        <div class="label-column">
+            <h2>내 파일 목록</h2>
+        </div>
+        <div class="content-column">
+            <div class="file-list" id="file-list">
+                <div class="file-item" th:each="filename : ${filenames}">
+                    <a th:href="@{'/api/files?filename=' + ${filename}}" th:text="${filename}"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!-- 로그아웃 섹션 -->
     <div class="section">
         <div class="label-column">
@@ -172,7 +200,9 @@
 
 <script>
     const maxFileNum = 200;
-    const fixedExtensions = new Set($('.fixed-extensions label input').map(function () {
+    const fixedExtensions = new Set($('.fixed-extensions label input').filter(function () {
+        return $(this).is(':checked');
+    }).map(function () {
         return $(this).val();
     }).get());
     const customExtensions = new Set(/*[[${chosenCustomExtensions}]]*/ []);
@@ -284,7 +314,6 @@
             $(this).parent().remove();
         });
 
-
         $('#delete-file').click(function () {
             const fileInput = $('#file-input');
             fileInput.val(null);
@@ -307,7 +336,7 @@
                 formData.append('file', file);
 
                 $.ajax({
-                    url: '/files',
+                    url: '/api/files',
                     type: 'POST',
                     data: formData,
                     processData: false,
@@ -317,6 +346,7 @@
                     },
                     success: function () {
                         alert('파일 전송 성공');
+                        location.reload();
                     },
                     error: function () {
                         alert('파일 전송 실패');
