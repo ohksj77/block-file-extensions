@@ -27,8 +27,8 @@ class MemberServiceTest extends LoginTest {
 
         // then
         final String loginId = request.loginId();
-        final Member member = memberRepository.findByLoginId(loginId).orElseThrow();
-        assertThat(member.getLoginId()).isEqualTo(loginId);
+        final Member member = memberRepository.findByLoginCredentialLoginId(loginId).orElseThrow();
+        assertThat(member.getLoginCredential().getLoginId()).isEqualTo(loginId);
     }
 
     @DisplayName("회원 가입시 중복된 아이디가 존재할 경우 예외가 발생하는가")

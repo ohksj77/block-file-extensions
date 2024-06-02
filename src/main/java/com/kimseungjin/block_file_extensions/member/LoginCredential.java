@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LoginCredential {
@@ -17,7 +18,6 @@ public class LoginCredential {
     @Column(nullable = false, unique = true)
     private String loginId;
 
-    @Getter
     @Column(nullable = false)
     private String password;
 
