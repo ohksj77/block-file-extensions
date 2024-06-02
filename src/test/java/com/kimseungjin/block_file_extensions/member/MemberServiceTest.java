@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.kimseungjin.block_file_extensions.fixture.MemberFixture;
+import com.kimseungjin.block_file_extensions.member.dto.RegisterRequest;
 import com.kimseungjin.block_file_extensions.support.service.LoginTest;
 
 import org.junit.jupiter.api.DisplayName;

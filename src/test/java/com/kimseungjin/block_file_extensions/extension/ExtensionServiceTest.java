@@ -3,6 +3,7 @@ package com.kimseungjin.block_file_extensions.extension;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.kimseungjin.block_file_extensions.extension.dto.ExtensionRequest;
 import com.kimseungjin.block_file_extensions.fixture.ExtensionFixture;
 import com.kimseungjin.block_file_extensions.support.service.LoginTest;
 

@@ -2,6 +2,7 @@ package com.kimseungjin.block_file_extensions.file;
 
 import com.kimseungjin.block_file_extensions.extension.Extension;
 import com.kimseungjin.block_file_extensions.extension.ExtensionService;
+import com.kimseungjin.block_file_extensions.file.dto.FileUploadResult;
 import com.kimseungjin.block_file_extensions.global.exception.EntityNotFoundException;
 
 import lombok.RequiredArgsConstructor;

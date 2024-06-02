@@ -101,7 +101,7 @@ public class Extension implements Auditable {
 
     private boolean isInvalidExtension(final String extension) {
         return FixedExtension.findExtension(extension).map(fixedExtensions::contains).orElse(false)
-                && customExtensions.contains(extension);
+                || customExtensions.contains(extension);
     }
 
     public void validateExtension(final String originalFilename) {

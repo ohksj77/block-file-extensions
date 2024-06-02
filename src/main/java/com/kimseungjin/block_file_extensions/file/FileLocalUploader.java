@@ -1,5 +1,7 @@
 package com.kimseungjin.block_file_extensions.file;
 
+import com.kimseungjin.block_file_extensions.file.dto.FileUploadResult;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;

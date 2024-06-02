@@ -6,16 +6,20 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.kimseungjin.block_file_extensions.fixture.MemberFixture;
+import com.kimseungjin.block_file_extensions.member.dto.RegisterRequest;
 import com.kimseungjin.block_file_extensions.support.controller.ControllerTest;
+import com.kimseungjin.block_file_extensions.support.web.UserIdArgumentResolverImpl;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
+@Import(UserIdArgumentResolverImpl.class)
 @WebMvcTest(
         controllers = MemberController.class,
         excludeAutoConfiguration = SecurityAutoConfiguration.class)
@@ -27,7 +31,7 @@ class MemberControllerTest extends ControllerTest {
     @Test
     void register() throws Exception {
         doNothing().when(memberService).register(any());
-        final RegisterRequest request = MemberFixture.MEMBER1.toRegisterRequest();
+        final RegisterRequest request = MemberFixture.REGISTER_REQUEST.toRegisterRequest();
 
         final ResultActions perform =
                 mockMvc.perform(

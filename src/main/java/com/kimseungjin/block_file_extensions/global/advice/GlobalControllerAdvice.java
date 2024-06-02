@@ -19,39 +19,39 @@ public class GlobalControllerAdvice {
     @ExceptionHandler(EntityNotFoundException.class)
     public String handleEntityNotFoundException(
             final EntityNotFoundException e, final RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-        return "redirect:/error";
+        return handle(redirectAttributes, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(LoginException.class)
     public String handleLoginException(
             final LoginException e, final RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-        return "redirect:/error";
+        return handle(redirectAttributes, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(AuthenticationException.class)
     public String handleAuthenticationException(
             final AuthenticationException e, final RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-        return "redirect:/error";
+        return handle(redirectAttributes, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ValidationException.class)
     public String handleValidationException(
             final ValidationException e, final RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("errorMessage", "입력값을 확인해주세요.");
-        return "redirect:/error";
+        return handle(redirectAttributes, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(NullPointerException.class)
     public String handleNullPointerException(
             final NullPointerException e, final RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        return handle(redirectAttributes, e.getMessage());
+    }
+
+    private String handle(final RedirectAttributes redirectAttributes, final String errorMessage) {
+        redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
         return "redirect:/error";
     }
 }

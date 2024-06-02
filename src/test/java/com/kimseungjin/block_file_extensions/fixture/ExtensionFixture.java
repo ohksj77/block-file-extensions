@@ -1,7 +1,7 @@
 package com.kimseungjin.block_file_extensions.fixture;
 
 import com.kimseungjin.block_file_extensions.extension.Extension;
-import com.kimseungjin.block_file_extensions.extension.ExtensionRequest;
+import com.kimseungjin.block_file_extensions.extension.dto.ExtensionRequest;
 
 import lombok.RequiredArgsConstructor;
 
