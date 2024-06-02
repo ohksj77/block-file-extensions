@@ -4,4 +4,4 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 public record ExtensionRequest(
-        @Pattern(regexp = "^[a-zA-Z0-9_-]{2,5}$") String name, @NotNull Boolean isAdded) {}
+        @Pattern(regexp = "^[a-zA-Z0-9_-]{1,20}$") String name, @NotNull Boolean isAdded) {}
