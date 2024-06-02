@@ -2,6 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Login</title>
     <style>
         body {
@@ -91,14 +92,14 @@
 <body>
 <div class="container">
     <h2>Login</h2>
-    <form method="post" th:action="@{/login}">
+    <form id="loginForm" method="post" th:action="@{/login}">
         <div>
             <label for="username">Username:</label>
-            <input id="username" name="username" type="text"/>
+            <input id="username" maxlength="10" minlength="3" name="username" required type="text"/>
         </div>
         <div>
             <label for="password">Password:</label>
-            <input id="password" name="password" type="password"/>
+            <input id="password" maxlength="10" minlength="3" name="password" required type="password"/>
         </div>
         <div>
             <button type="submit">Login</button>
@@ -109,14 +110,36 @@
     <div class="notice-box">
         <h3>[미리 저장된 계정 정보]</h3>
         <div>
-            <h4>[계정1]</h4>
+            <h4>[계정1]
+                <button class="input-button" onclick="fillForm('user1', 'password1')">입력하기</button>
+            </h4>
             <p>Username: user1</p>
             <p>Password: password1</p>
-            <h4>[계정2]</h4>
+            <h4>[계정2]
+                <button class="input-button" onclick="fillForm('user2', 'password2')">입력하기</button>
+            </h4>
             <p>Username: user2</p>
             <p>Password: password2</p>
         </div>
     </div>
 </div>
+<script>
+    function fillForm(username, password) {
+        $('#username').val(username);
+        $('#password').val(password);
+    }
+
+    $(document).ready(function () {
+        $('#loginForm').submit(function (event) {
+            const username = $('#username').val().trim();
+            const password = $('#password').val().trim();
+
+            if (username === '' || password === '') {
+                alert('모든 필드를 입력해주세요.');
+                event.preventDefault();
+            }
+        });
+    });
+</script>
 </body>
 </html>

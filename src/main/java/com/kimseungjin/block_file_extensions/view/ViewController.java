@@ -1,8 +1,5 @@
 package com.kimseungjin.block_file_extensions.view;
 
-import com.kimseungjin.block_file_extensions.file.FixedExtension;
-
-import jakarta.servlet.http.HttpServletRequest;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,12 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/")
 @RequiredArgsConstructor
 public class ViewController {
-
-    @GetMapping("/")
-    public String index(final Model model) {
-        model.addAttribute("fixedExtensions", FixedExtension.getAllValues());
-        return "index";
-    }
 
     @GetMapping("register")
     public String register() {
@@ -44,12 +35,7 @@ public class ViewController {
     }
 
     @GetMapping("error")
-    public String error(final HttpServletRequest request, final Model model) {
-        final String errorMessage = (String) request.getSession().getAttribute("errorMessage");
-
-        if (errorMessage != null) {
-            model.addAttribute("errorMessage", errorMessage);
-        }
+    public String error(final Model model) {
         return "error";
     }
 }
