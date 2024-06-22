@@ -37,7 +37,6 @@
 
 - Extension 엔티티는 파일 확장자를 나타내며, 고정 확장자 리스트와 커스텀 확장자 리스트를 가집니다.
 - 두 리스트를 담기 위한 자료구조를 고민하며 사용자가 추가 요청한 확장자가 존재하는지 확인에 용이하기 위해 Set 자료구조를 활용하며, 화면상 순서가 고정된 고정 확장자는 HashSet으로, 커스텀 확장자의 경우 순서를 직접 고정시키기 위해 LinkedHashSet을 사용했습니다.
-- 초과 저장되는 경우를 방지하기 위해 직접 capacity를 지정하였습니다.
 
 ![](https://github.com/ohksj77/block-file-extensions-api-docs/assets/89020004/fa299b9a-8d8d-4ce3-95e4-7c075a58c071)
 
